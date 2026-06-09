@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>QR Forge — Built From Scratch</title>
+<meta name="description" content="An original from-scratch build of QR Forge: a FastAPI service that generates, customises and tracks QR codes through a clean REST API." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --accent:#334155; --accent-soft:#eef1f5; --ink:#11161d; --muted:#4d5765;
+    --line:#dde2e9; --bg:#f8fafc; --card:#ffffff;
+    --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 28px}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code{font-family:var(--mono);font-size:.86em;background:var(--accent-soft);padding:.1em .4em;border-radius:4px;color:#1e293b}
+  h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.15;letter-spacing:-.01em}
+  header.hero{padding:88px 0 56px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:0 0 22px}
+  h1{font-size:clamp(2.6rem,6vw,4.1rem);margin:0 0 18px}
+  .lede{font-size:1.22rem;color:var(--muted);max-width:62ch;margin:0 0 28px}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;font-size:.82rem}
+  .chip{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--muted);background:var(--card)}
+  section{padding:54px 0;border-bottom:1px solid var(--line)}
+  .kicker{font-family:var(--mono);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+  h2{font-size:clamp(1.7rem,3.4vw,2.3rem);margin:0 0 20px}
+  h3{font-size:1.2rem;margin:0 0 6px}
+  p{margin:0 0 18px;max-width:68ch}
+  .muted{color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:8px}
+  .tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .tool .t{font-family:var(--mono);font-size:.78rem;color:var(--accent);letter-spacing:.04em;margin-bottom:8px}
+  .tool h3{font-size:1.05rem;font-family:var(--sans);font-weight:600;margin-bottom:6px}
+  .tool p{font-size:.92rem;color:var(--muted);margin:0}
+  ol.flow{counter-reset:s;list-style:none;padding:0;margin:24px 0 0}
+  ol.flow li{position:relative;padding:18px 0 18px 56px;border-top:1px solid var(--line)}
+  ol.flow li:before{counter-increment:s;content:counter(s,decimal-leading-zero);position:absolute;left:0;top:18px;font-family:var(--mono);font-size:.8rem;color:var(--accent);border:1px solid var(--line);border-radius:8px;width:38px;height:38px;display:grid;place-items:center;background:var(--card)}
+  ol.flow li h3{font-family:var(--sans);font-size:1.02rem;font-weight:600;margin:0 0 4px}
+  ol.flow li p{margin:0;font-size:.93rem;color:var(--muted)}
+  .callout{background:var(--accent-soft);border:1px solid #cdd5e0;border-radius:14px;padding:24px 26px;margin-top:8px}
+  .callout p:last-child{margin:0}
+  ul.learn{list-style:none;padding:0;margin:8px 0 0}
+  ul.learn li{padding:14px 0 14px 30px;border-top:1px solid var(--line);position:relative;color:var(--muted);max-width:68ch}
+  ul.learn li:before{content:"→";position:absolute;left:0;color:var(--accent);font-family:var(--mono)}
+  ul.learn li b{color:var(--ink);font-weight:600}
+  .price{display:flex;align-items:baseline;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 26px;margin-top:8px}
+  .price .n{font-family:var(--serif);font-size:2.6rem;color:var(--accent);line-height:1}
+  .price .l{color:var(--muted);font-size:.95rem}
+  footer{padding:48px 0 80px}
+  .credit{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px}
+  .credit .k{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  footer .fine{font-size:.8rem;color:var(--muted);margin-top:22px;text-align:center}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">From-Scratch Build · Software Development &amp; DevOps</p>
+    <h1>QR Forge</h1>
+    <p class="lede">A QR code looks trivial until you build the service behind one: encode arbitrary data, render it cleanly, customise it, and hand it back over a web API that thousands of clients can hit. QR Forge is that service, built on FastAPI. I rebuilt it from scratch because it's a perfect small backend — one clear job, done properly, from request to response.</p>
+    <div class="meta">
+      <span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">REST</span>
+      <span class="chip">Pydantic</span><span class="chip">OpenAPI</span><span class="chip">Docker</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">What it is</p>
+    <h2>A focused backend service, done right</h2>
+    <p>QR Forge takes a payload — a URL, some text, contact details — and returns a QR code image, with options for size, error-correction level and styling. Simple on the surface, but the build is really about everything that makes a <i>good</i> API: typed request and response models, validation that rejects bad input before it causes trouble, sensible errors, and documentation that generates itself.</p>
+    <p>FastAPI is the natural home for it. You declare your data shapes once, and you get validation, serialisation and an interactive OpenAPI spec for free. The lesson is that a clean, well-typed contract is what turns a script into a service.</p>
+    <div class="price">
+      <div class="n">data → QR</div>
+      <div class="l">one job, exposed as a clean typed endpoint — the whole discipline is doing that single thing properly.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">The stack</p>
+    <h2>From HTTP request to QR image</h2>
+    <p class="muted">A small service that takes its contract seriously.</p>
+    <div class="grid">
+      <div class="tool"><div class="t">framework</div><h3>FastAPI</h3><p>Async, typed and fast — declare the endpoints and the framework handles the plumbing.</p></div>
+      <div class="tool"><div class="t">validation</div><h3>Pydantic models</h3><p>Typed request and response schemas that reject malformed input at the door.</p></div>
+      <div class="tool"><div class="t">core</div><h3>QR generation</h3><p>Encode the payload and render it to an image with the requested size and error correction.</p></div>
+      <div class="tool"><div class="t">docs</div><h3>OpenAPI</h3><p>Interactive, always-accurate API docs generated straight from the code.</p></div>
+      <div class="tool"><div class="t">errors</div><h3>Error handling</h3><p>Clear status codes and messages so clients know exactly what went wrong.</p></div>
+      <div class="tool"><div class="t">ship</div><h3>Docker</h3><p>Containerise the service so it runs the same on a laptop and in production.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">Architecture</p>
+    <h2>How a request is served</h2>
+    <p>Every call walks the same clean request-to-response path:</p>
+    <ol class="flow">
+      <li><h3>Receive</h3><p>An HTTP request arrives with the payload and options.</p></li>
+      <li><h3>Validate</h3><p>Pydantic checks the input against the typed schema, rejecting bad data.</p></li>
+      <li><h3>Generate</h3><p>Encode the payload into a QR code at the requested settings.</p></li>
+      <li><h3>Respond</h3><p>Return the image (or a typed JSON payload) with the right content type.</p></li>
+      <li><h3>Document</h3><p>The same models keep the OpenAPI spec accurate automatically.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">Reflection</p>
+    <h2>What rebuilding it taught me</h2>
+    <ul class="learn">
+      <li><b>The contract is the product.</b> Typed request and response models are what separate a robust service from a fragile script.</li>
+      <li><b>Validation belongs at the edge.</b> Rejecting bad input the moment it arrives keeps the core logic clean and safe.</li>
+      <li><b>Docs should be free.</b> Generating OpenAPI from the code means the documentation can never drift out of date.</li>
+      <li><b>Small scope, high polish.</b> A service that does one thing flawlessly teaches more than a sprawling one that half-works.</li>
+      <li><b>Containerise early.</b> "Works on my machine" stops being a problem the moment the service ships in a container.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="credit">
+      <div class="k">About this build</div>
+      <p style="margin:0">An original, from-scratch build by <b>Andrea</b> — written to learn modern backend service design: FastAPI, Pydantic validation, REST contracts, auto-generated OpenAPI docs and Docker packaging. Plain HTML/CSS, deployed on GitHub Pages.</p>
+    </div>
+    <p class="fine">Built from scratch by Andrea · one of an ongoing series of learning builds.</p>
+  </div>
+</footer>
+</body>
+</html>
