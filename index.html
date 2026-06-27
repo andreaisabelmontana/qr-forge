@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>QR Forge — Built From Scratch</title>
-<meta name="description" content="An original from-scratch build of QR Forge: a FastAPI service that generates, customises and tracks QR codes through a clean REST API." />
+<title>QR Forge — FastAPI QR generator, customiser &amp; tracker</title>
+<meta name="description" content="QR Forge: a FastAPI service that generates, customises and tracks QR codes through a clean REST API. PNG/SVG output, colour & error-correction options, scan-logging redirects and analytics." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -44,15 +44,31 @@
   ol.flow li:before{counter-increment:s;content:counter(s,decimal-leading-zero);position:absolute;left:0;top:18px;font-family:var(--mono);font-size:.8rem;color:var(--accent);border:1px solid var(--line);border-radius:8px;width:38px;height:38px;display:grid;place-items:center;background:var(--card)}
   ol.flow li h3{font-family:var(--sans);font-size:1.02rem;font-weight:600;margin:0 0 4px}
   ol.flow li p{margin:0;font-size:.93rem;color:var(--muted)}
-  .callout{background:var(--accent-soft);border:1px solid #cdd5e0;border-radius:14px;padding:24px 26px;margin-top:8px}
-  .callout p:last-child{margin:0}
+  .callout{background:var(--accent-soft);border:1px solid #cdd5e0;border-radius:14px;padding:20px 24px;margin-top:8px}
+  .callout p{margin:0;font-size:.95rem;color:var(--muted)}
+  table.api{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.api th,table.api td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.api th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft)}
+  table.api td:first-child code{background:transparent;padding:0;color:#0f766e;font-weight:500}
+  table.api tr:last-child td{border-bottom:none}
+  .verb{font-family:var(--mono);font-weight:500;color:var(--accent)}
+  pre{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:18px 20px;overflow:auto;font-family:var(--mono);font-size:.82rem;line-height:1.6;margin:0}
+  pre .c{color:#7c8aa0}
+  .demo{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:8px}
+  .demo .row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end}
+  .demo label{display:block;font-size:.78rem;font-family:var(--mono);color:var(--muted);margin-bottom:5px;letter-spacing:.03em}
+  .demo input[type=text]{flex:1;min-width:200px;font-family:var(--sans);font-size:.95rem;padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink)}
+  .demo input[type=color]{width:46px;height:40px;padding:2px;border:1px solid var(--line);border-radius:9px;background:var(--bg)}
+  .demo select{font-family:var(--sans);font-size:.92rem;padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink)}
+  .demo button{font-family:var(--sans);font-weight:600;font-size:.92rem;padding:10px 18px;border:none;border-radius:9px;background:var(--accent);color:#fff;cursor:pointer}
+  .demo button:hover{background:#1e293b}
+  .demo .out{margin-top:20px;display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  .demo .out canvas{border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px}
+  .demo .out pre{flex:1;min-width:240px}
   ul.learn{list-style:none;padding:0;margin:8px 0 0}
   ul.learn li{padding:14px 0 14px 30px;border-top:1px solid var(--line);position:relative;color:var(--muted);max-width:68ch}
   ul.learn li:before{content:"→";position:absolute;left:0;color:var(--accent);font-family:var(--mono)}
   ul.learn li b{color:var(--ink);font-weight:600}
-  .price{display:flex;align-items:baseline;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 26px;margin-top:8px}
-  .price .n{font-family:var(--serif);font-size:2.6rem;color:var(--accent);line-height:1}
-  .price .l{color:var(--muted);font-size:.95rem}
   footer{padding:48px 0 80px}
   .credit{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px}
   .credit .k{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
@@ -62,12 +78,12 @@
 <body>
 <header class="hero">
   <div class="wrap">
-    <p class="eyebrow">From-Scratch Build · Software Development &amp; DevOps</p>
+    <p class="eyebrow">FastAPI Service · Generate · Customise · Track</p>
     <h1>QR Forge</h1>
-    <p class="lede">A QR code looks trivial until you build the service behind one: encode arbitrary data, render it cleanly, customise it, and hand it back over a web API that thousands of clients can hit. QR Forge is that service, built on FastAPI. I rebuilt it from scratch because it's a perfect small backend — one clear job, done properly, from request to response.</p>
+    <p class="lede">A FastAPI service that generates, customises and tracks QR codes through a clean REST API. Render any URL or text to PNG or SVG, restyle it with your own colours and error-correction level, and — when you want analytics — mint a trackable code whose every scan is logged and counted.</p>
     <div class="meta">
-      <span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">REST</span>
-      <span class="chip">Pydantic</span><span class="chip">OpenAPI</span><span class="chip">Docker</span>
+      <span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">qrcode + Pillow</span>
+      <span class="chip">SQLite</span><span class="chip">Pydantic</span><span class="chip">REST</span>
     </div>
   </div>
 </header>
@@ -75,58 +91,102 @@
 <section>
   <div class="wrap">
     <p class="kicker">What it is</p>
-    <h2>A focused backend service, done right</h2>
-    <p>QR Forge takes a payload — a URL, some text, contact details — and returns a QR code image, with options for size, error-correction level and styling. Simple on the surface, but the build is really about everything that makes a <i>good</i> API: typed request and response models, validation that rejects bad input before it causes trouble, sensible errors, and documentation that generates itself.</p>
-    <p>FastAPI is the natural home for it. You declare your data shapes once, and you get validation, serialisation and an interactive OpenAPI spec for free. The lesson is that a clean, well-typed contract is what turns a script into a service.</p>
-    <div class="price">
-      <div class="n">data → QR</div>
-      <div class="l">one job, exposed as a clean typed endpoint — the whole discipline is doing that single thing properly.</div>
+    <h2>A real backend, not a wrapper</h2>
+    <p>QR Forge is a working FastAPI application backed by SQLite. You <code>POST</code> a payload and styling options; it persists the code, renders an image with <code>qrcode</code> + Pillow, and hands you back an id, image links and an inline PNG. Codes you mark as <em>tracked</em> encode a short redirect link instead of the raw URL, so the service can record each scan and report analytics.</p>
+    <div class="callout">
+      <p>This page is a static demo deployed on GitHub Pages, so the live preview below renders QR codes in your browser. The actual service is the FastAPI backend in this repo — run it with <code>uvicorn app.api:app</code> and you get the full create / track / analytics API documented here.</p>
     </div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <p class="kicker">The stack</p>
-    <h2>From HTTP request to QR image</h2>
-    <p class="muted">A small service that takes its contract seriously.</p>
+    <p class="kicker">Try it</p>
+    <h2>Live preview</h2>
+    <p class="muted">A browser-side render of what <code>POST /qr</code> produces. Change the payload, colours and module size — the equivalent API request is shown alongside.</p>
+    <div class="demo">
+      <div class="row">
+        <div style="flex:1;min-width:200px"><label>payload</label><input id="d-payload" type="text" value="https://andreaisabelmontana.github.io/qr-forge/" /></div>
+        <div><label>fill</label><input id="d-fill" type="color" value="#1e293b" /></div>
+        <div><label>back</label><input id="d-back" type="color" value="#f8fafc" /></div>
+        <div><label>box_size</label><select id="d-box"><option>6</option><option selected>8</option><option>10</option><option>12</option></select></div>
+        <div><label>EC level</label><select id="d-ec"><option>L</option><option selected>M</option><option>Q</option><option>H</option></select></div>
+        <div><button id="d-go">Generate</button></div>
+      </div>
+      <div class="out">
+        <canvas id="d-canvas" width="200" height="200"></canvas>
+        <pre id="d-curl"></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">API</p>
+    <h2>Endpoints</h2>
+    <table class="api">
+      <tr><th>Method</th><th>Route</th><th>Purpose</th></tr>
+      <tr><td><span class="verb">POST</span></td><td><code>/qr</code></td><td>Create a code; returns metadata + inline base64 PNG.</td></tr>
+      <tr><td><span class="verb">GET</span></td><td><code>/qr</code></td><td>List all codes with scan counts.</td></tr>
+      <tr><td><span class="verb">GET</span></td><td><code>/qr/{id}</code></td><td>Fetch one code's metadata.</td></tr>
+      <tr><td><span class="verb">GET</span></td><td><code>/qr/{id}.png</code></td><td>Render as PNG.</td></tr>
+      <tr><td><span class="verb">GET</span></td><td><code>/qr/{id}.svg</code></td><td>Render as SVG.</td></tr>
+      <tr><td><span class="verb">GET</span></td><td><code>/qr/{id}/stats</code></td><td>Scan analytics for a tracked code.</td></tr>
+      <tr><td><span class="verb">GET</span></td><td><code>/r/{id}</code></td><td>Log a scan and 302-redirect to the target URL.</td></tr>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">Customisation</p>
+    <h2>Style every code</h2>
     <div class="grid">
-      <div class="tool"><div class="t">framework</div><h3>FastAPI</h3><p>Async, typed and fast — declare the endpoints and the framework handles the plumbing.</p></div>
-      <div class="tool"><div class="t">validation</div><h3>Pydantic models</h3><p>Typed request and response schemas that reject malformed input at the door.</p></div>
-      <div class="tool"><div class="t">core</div><h3>QR generation</h3><p>Encode the payload and render it to an image with the requested size and error correction.</p></div>
-      <div class="tool"><div class="t">docs</div><h3>OpenAPI</h3><p>Interactive, always-accurate API docs generated straight from the code.</p></div>
-      <div class="tool"><div class="t">errors</div><h3>Error handling</h3><p>Clear status codes and messages so clients know exactly what went wrong.</p></div>
-      <div class="tool"><div class="t">ship</div><h3>Docker</h3><p>Containerise the service so it runs the same on a laptop and in production.</p></div>
+      <div class="tool"><div class="t">fill_color / back_color</div><h3>Colours</h3><p>Any hex foreground and background — branded codes, light or dark.</p></div>
+      <div class="tool"><div class="t">box_size</div><h3>Module size</h3><p>Pixels per QR module (1–50) to scale the output up or down.</p></div>
+      <div class="tool"><div class="t">border</div><h3>Quiet zone</h3><p>Width of the silent margin in modules (0–20) for reliable scanning.</p></div>
+      <div class="tool"><div class="t">error_correction</div><h3>EC level</h3><p>L / M / Q / H — from ~7% to ~30% recovery for damaged or styled codes.</p></div>
+      <div class="tool"><div class="t">format</div><h3>PNG &amp; SVG</h3><p>Raster for sharing, vector for print — same code, two endpoints.</p></div>
+      <div class="tool"><div class="t">tracked</div><h3>Trackable</h3><p>Encode a redirect link so each scan is logged for analytics.</p></div>
     </div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <p class="kicker">Architecture</p>
-    <h2>How a request is served</h2>
-    <p>Every call walks the same clean request-to-response path:</p>
+    <p class="kicker">Tracking</p>
+    <h2>How scan-tracking works</h2>
+    <p>Mark a code <code>"tracked": true</code> and the original URL becomes its stored <em>target</em>, while the image encodes <code>…/r/{id}</code>. Every scan walks this path:</p>
     <ol class="flow">
-      <li><h3>Receive</h3><p>An HTTP request arrives with the payload and options.</p></li>
-      <li><h3>Validate</h3><p>Pydantic checks the input against the typed schema, rejecting bad data.</p></li>
-      <li><h3>Generate</h3><p>Encode the payload into a QR code at the requested settings.</p></li>
-      <li><h3>Respond</h3><p>Return the image (or a typed JSON payload) with the right content type.</p></li>
-      <li><h3>Document</h3><p>The same models keep the OpenAPI spec accurate automatically.</p></li>
+      <li><h3>Scan</h3><p>A phone opens the encoded <code>/r/{id}</code> link.</p></li>
+      <li><h3>Log</h3><p>The service records a scan row: timestamp, user-agent, referrer.</p></li>
+      <li><h3>Redirect</h3><p>It returns a <code>302</code> to the real target URL — the user lands where intended.</p></li>
+      <li><h3>Analyse</h3><p><code>GET /qr/{id}/stats</code> aggregates total scans, first/last time and a per-user-agent breakdown.</p></li>
     </ol>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <p class="kicker">Reflection</p>
-    <h2>What rebuilding it taught me</h2>
-    <ul class="learn">
-      <li><b>The contract is the product.</b> Typed request and response models are what separate a robust service from a fragile script.</li>
-      <li><b>Validation belongs at the edge.</b> Rejecting bad input the moment it arrives keeps the core logic clean and safe.</li>
-      <li><b>Docs should be free.</b> Generating OpenAPI from the code means the documentation can never drift out of date.</li>
-      <li><b>Small scope, high polish.</b> A service that does one thing flawlessly teaches more than a sprawling one that half-works.</li>
-      <li><b>Containerise early.</b> "Works on my machine" stops being a problem the moment the service ships in a container.</li>
-    </ul>
+    <p class="kicker">Run it</p>
+    <h2>From clone to API</h2>
+<pre><span class="c"># install &amp; serve</span>
+pip install -r requirements.txt
+uvicorn app.api:app --reload
+
+<span class="c"># create a tracked QR</span>
+curl -X POST http://127.0.0.1:8000/qr \
+  -H 'Content-Type: application/json' \
+  -d '{"payload":"https://example.org","tracked":true,"error_correction":"Q"}'
+
+<span class="c"># a scan is logged, then redirected</span>
+curl -s -o /dev/null -w '%{http_code} -> %{redirect_url}\n' \
+  http://127.0.0.1:8000/r/&lt;id&gt;
+
+<span class="c"># read analytics</span>
+curl http://127.0.0.1:8000/qr/&lt;id&gt;/stats</pre>
+    <p class="muted" style="margin-top:18px">Interactive OpenAPI docs are served at <code>/docs</code>.</p>
   </div>
 </section>
 
@@ -134,10 +194,44 @@
   <div class="wrap">
     <div class="credit">
       <div class="k">About this build</div>
-      <p style="margin:0">An original, from-scratch build by <b>Andrea</b> — written to learn modern backend service design: FastAPI, Pydantic validation, REST contracts, auto-generated OpenAPI docs and Docker packaging. Plain HTML/CSS, deployed on GitHub Pages.</p>
+      <p style="margin:0">An original build by <b>Andrea</b> — a focused FastAPI backend covering the full lifecycle of a QR code: typed request models, image rendering with <code>qrcode</code> + Pillow, SQLite persistence, scan-logging redirects and an analytics endpoint, all tested with FastAPI's TestClient.</p>
     </div>
-    <p class="fine">Built from scratch by Andrea · one of an ongoing series of learning builds.</p>
+    <p class="fine">QR Forge · a FastAPI QR generation, customisation &amp; tracking service.</p>
   </div>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var canvas = $('d-canvas');
+  function render(){
+    var payload = $('d-payload').value || ' ';
+    var fill = $('d-fill').value, back = $('d-back').value;
+    var box = parseInt($('d-box').value,10), ec = $('d-ec').value;
+    if (window.QRCode) {
+      window.QRCode.toCanvas(canvas, payload, {
+        margin: 4,
+        scale: box,
+        color: { dark: fill, light: back },
+        errorCorrectionLevel: ec
+      }, function(err){ if(err) console.error(err); });
+    }
+    var body = {
+      payload: payload, fill_color: fill, back_color: back,
+      box_size: box, error_correction: ec
+    };
+    $('d-curl').textContent =
+      'curl -X POST http://127.0.0.1:8000/qr \\\n' +
+      "  -H 'Content-Type: application/json' \\\n" +
+      "  -d '" + JSON.stringify(body) + "'";
+  }
+  $('d-go').addEventListener('click', render);
+  ['d-payload','d-fill','d-back','d-box','d-ec'].forEach(function(id){
+    $(id).addEventListener('change', render);
+  });
+  render();
+})();
+</script>
 </body>
 </html>

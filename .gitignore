@@ -5,3 +5,17 @@ Thumbs.db
 node_modules/
 dist/
 build/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+# QR Forge runtime artifacts
+*.db
+qrforge.db
+demo_qr.png
+_live_smoke.db
